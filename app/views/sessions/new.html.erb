@@ -1,0 +1,16 @@
+<div>
+  <h1>Logga in!</h1>
+
+  <%= form_tag sessions_path do %>
+    <p>
+      <%= label_tag 'E-postadress' %> <br />
+      <%= text_field_tag :email, params[:email] %>
+    </p>
+    <p>
+      <%= label_tag 'Lösenord' %> <br />
+      <%= password_field_tag :password %>
+    </p>
+    <p class="button"><%= submit_tag 'Logga in', :id => "login" %></p>
+  <% end %>
+  <%= link_to "Skapa ny användare", new_user_path %>
+</div>
