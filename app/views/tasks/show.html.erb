@@ -1,0 +1,7 @@
+<% t = @task %>
+<h1><%= t.name %></h1>
+<h2>Uppdragsgivare: <%= t.client_name %></h2>
+<h2>Timtaxa: <%= t.hourly_rate %> kr</h2>
+<h2>Arvode: <%= t.fee %> kr</h2>
+<h2>Deadline: <%= t.deadline_date %></h2>
+<%= link_to "Redigera jobbet", edit_task_path(t) %>

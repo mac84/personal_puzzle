@@ -1,0 +1,11 @@
+<%= simple_form_for @task do |f| %>
+  <%= f.input :name, :label => "Namn" %>
+  <%= f.association :client, :prompt => "Välj uppdragsgivare", :label => "Uppdragsgivare" %>
+  <%= link_to "Skapa ny uppdragsgivare", new_client_path %>
+
+  <%= f.input :fee, :label => "Arvode" %>
+
+  <%= f.input :deadline_date, :label => "Deadline-datum" %>
+  <%= f.input :hourly_rate, :label => "Timtaxa" %>
+  <%= f.submit 'Spara jobb' %>
+<% end %>

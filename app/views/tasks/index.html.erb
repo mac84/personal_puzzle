@@ -1,0 +1,12 @@
+<h1>Jobb</h1>
+<ul class="unstyled">
+  <% @tasks.each do |t| %>
+    <li><%= link_to t.name, task_path(t) %> åt <%= t.client_name%>, deadline: <%= t.deadline_date %> </li>
+    <button class="btn icon-play pull-left"></button>
+    <div class="progress">
+    <div class="bar"
+       style="width: 60%;"></div>
+    </div>
+  <% end %>
+</ul>
+<%= link_to "Skapa nytt jobb", new_task_path %>
