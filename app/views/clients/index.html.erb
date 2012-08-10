@@ -1,0 +1,7 @@
+<h1>Uppdragsgivare</h1>
+<ul>
+  <% @clients.each do |c| %>
+    <li><%= link_to c.name, "#" %></li>
+  <% end %>
+</ul>
+<%= link_to "Skapa ny uppdragsgivare", new_client_path %>
