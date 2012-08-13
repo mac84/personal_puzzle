@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/elabs/elabs_matchers.git
+  revision: 40eebc7c7ffc3cc9eb0e3aa52397ef1959aa7e5a
+  specs:
+    elabs_matchers (0.0.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -178,6 +184,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   database_cleaner
   delorean
+  elabs_matchers!
   jquery-rails
   launchy
   machinist

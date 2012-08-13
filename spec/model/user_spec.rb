@@ -1,12 +1,38 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "User" do
-  let(:user) { User.make! }
+  let(:user) { User.make }
 
   describe "validations" do
     it "can be valid" do
       User.make.should be_valid
     end
+
+    it "validates confirmation of password" do
+      user = User.make(:password =>"1234", :password_confirmation =>"wrong")
+      # user.should have(1).error_on(:password_confirmation)
+      expect { user.save! }.to raise_error{ActiveRecord::RecordInvalid}
+    end
+
+    it "validates presence of password on create" do
+      user = User.make(:password => nil)
+      expect { user.save! }.to raise_error{ActiveRecord::RecordInvalid}
+    end
+
+    it "validates format of email" do
+      user.should_not allow(nil, "", "foo", "foo@bar").as(:email)
+      user.should allow("foo@bar.com").as(:email)
+    end
+
+    it "validates uniqueness of email" do
+      user1 = User.make!(:email => "foo@bar.com")
+      user2 = User.make(:email => "foo@bar.com")
+      user2.should have(1).error_on(:email)
+    end
+  end
+
+  describe "relations" do
+
   end
 
   describe "saving a user" do
