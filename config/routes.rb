@@ -1,7 +1,6 @@
 PersonalPuzzle::Application.routes.draw do
-
-  match "log_in"             => "sessions#new",             :as => "log_in"
-  delete "log_out"           => "sessions#destroy"
+  get "/log_in" => "sessions#new", :as => "log_in"
+  resource :session, :only => %w[create destroy]
 
   get "sign_up" => "users#new", :as => "sign_up"
 
@@ -9,7 +8,6 @@ PersonalPuzzle::Application.routes.draw do
   root :to => "sessions#new"
 
   resources :users
-  resources :sessions
   resources :clients
   resources :tasks
 
