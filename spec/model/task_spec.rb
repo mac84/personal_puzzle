@@ -21,11 +21,11 @@ describe "Task" do
       @task1.stop_timer
     end
 
-    it "should add a completed shift for the task"
+    it "should add a completed shift for the task" do
       @task1.completed_shifts.should_not be_empty
     end
 
-    it "should add the duration between start and stop as the duration for the completed shift"
+    it "should add the duration between start and stop as the duration for the completed shift" do
       shift1 = @task1.completed_shifts.first
       shift1.start_date.should eq(now)
       shift1.duration.should eq(20)
