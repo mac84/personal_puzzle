@@ -5,19 +5,12 @@ class User < ActiveRecord::Base
   has_many :tasks, :dependent => :destroy
   has_many :clients, :through => :tasks
 
-  before_save :encrypt_password
+  before_save :encrypt_password, :if => proc { password.present? }
 
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
   validates_presence_of :email
   validates_uniqueness_of :email
-
-  def encrypt_password
-    if password.present?
-      self.password_salt = BCrypt::Engine.generate_salt
-      self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
-    end
-  end
 
   def self.authenticate(email, password)
     user = find_by_email(email)
@@ -28,4 +21,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  protected
+
+  def encrypt_password
+    self.password_salt = BCrypt::Engine.generate_salt
+    self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+  end
 end
