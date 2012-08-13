@@ -13,6 +13,10 @@ group :assets do
   gem "twitter-bootstrap-rails"
 end
 
+group :development do
+  gem 'pry-rails'
+end
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'machinist'
