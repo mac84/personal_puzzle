@@ -1,6 +1,4 @@
 # encoding: utf-8
-require 'acceptance/acceptance_helper'
-
 feature "Show pages", %q{
   In order to view the different parts of the site
   As a user

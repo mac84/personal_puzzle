@@ -28,18 +28,16 @@ describe "User" do
     end
   end
 
-  describe "saving a user" do
-    it "generates password salt and hash if password is set" do
+  describe "#password" do
+    it "hashes the password when set" do
       user = User.make(:password => "1234")
-      user.password_hash.should eq(nil)
-      user.save
-
-      user.password_hash.should eq(BCrypt::Engine.hash_secret(user.password, user.password_salt))
+      user.password.should eq("1234")
+      user.password.to_s.should_not eq("1234")
     end
 
-    it "does not generate a password salt and hash if password is not set" do
-      user = User.make(:password => nil)
-      expect { user.save }.to_not change { user.password_hash }
+    it "should not equal another password" do
+      user = User.make(:password => "1234")
+      user.password.should_not eq("not my password")
     end
   end
 
