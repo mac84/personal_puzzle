@@ -1,6 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-
-describe "Task", :pending => true do
+describe "Task" do
   let(:task)   { Task.make! }
   let(:user)   { User.make! }
   let(:client) { Client.make! }
@@ -9,12 +7,28 @@ describe "Task", :pending => true do
     it "can be valid" do
       Task.make.should be_valid
     end
+
+    it "must have a name" do
+      task.should_not allow(nil, "", " ").as(:name)
+    end
   end
 
-  context "the timer" do
+  describe "#client_name" do
+    it "should delegate to client.name if client exists" do
+      client = Client.make(:name => "Elabs")
+      task = Task.make(:client => client)
+      task.client_name.should eq("Elabs")
+    end
+    it "should return nil if the client doesn't exist" do
+      client = nil
+      task = Task.make(:client => client)
+      task.client_name.should eq(nil)
+    end
+  end
+
+  context "the timer", :pending => true do
     before do
       @task1 = Task.make!(:client => client, :user => user)
-      after(:each) { back_to_the_present }
       @now = Time.now
       @task1.start_timer
       time_travel_to(20.minutes.from_now)
