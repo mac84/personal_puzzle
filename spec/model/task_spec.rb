@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "Task" do
+describe "Task", :pending => true do
   let(:task)   { Task.make! }
   let(:user)   { User.make! }
   let(:client) { Client.make! }

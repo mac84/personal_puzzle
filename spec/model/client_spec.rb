@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "Client" do
+describe "Client", :pending => true do
   let(:Client) { Client.make! }
 
   describe "validations" do
