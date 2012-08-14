@@ -1,3 +1,4 @@
+
 class Task < ActiveRecord::Base
   attr_accessible :date_finished, :deadline_date, :fee, :hourly_rate, :name, :client_id
 

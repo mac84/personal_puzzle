@@ -11,19 +11,27 @@ class ClientsController < ApplicationController
     @client = Client.new(params[:client])
 
     if @client.save
-      redirect_to root_url, :notice => "Uppdragsgivaren \"" + @client.name + "\" sparat!"
+      redirect_to root_url, :notice => "Uppdragsgivaren \"" + @client.name + "\" sparad!"
     else
       render "new"
     end
   end
 
   def show
+    @client = Client.find(params[:id])
   end
 
   def edit
+    @client = Client.find(params[:id])
   end
 
   def update
+    @client = Client.find(params[:id])
+    if @client.update_attributes(params[:client])
+      redirect_to root_url, :notice => "Uppdragsgivaren \"" + @client.name + "\" uppdaterad!"
+    else
+      render "edit"
+    end
   end
 
   def destroy
