@@ -1,11 +1,10 @@
 class User < ActiveRecord::Base
+  Password = BCrypt::Password
+
   attr_accessible :email, :password, :password_confirmation
-  attr_accessor :password
 
   has_many :tasks, :dependent => :destroy
   has_many :clients, :through => :tasks
-
-  before_save :encrypt_password, :if => proc { password.present? }
 
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
@@ -16,17 +15,21 @@ class User < ActiveRecord::Base
 
   def self.authenticate(email, password)
     user = find_by_email(email)
-    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+    if user && user.password == password
       user
     else
       nil
     end
   end
 
-  protected
+  def password
+    @password ||= Password.new(password_hash)
+  end
 
-  def encrypt_password
-    self.password_salt = BCrypt::Engine.generate_salt
-    self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+  def password=(new_password)
+    return if new_password.blank?
+    @password = Password.create(new_password, :cost => Rails.application.config.bcrypt_cost)
+    self.password_hash = @password
   end
 end
+

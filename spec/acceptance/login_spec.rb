@@ -1,6 +1,4 @@
 # encoding: utf-8
-require 'acceptance/acceptance_helper'
-
 feature "Logging in" do
   background do
     @user1 = User.make!( :email => "pp@gmail.com", :password => "abcd1234" )

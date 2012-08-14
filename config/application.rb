@@ -11,6 +11,13 @@ end
 
 module PersonalPuzzle
   class Application < Rails::Application
+    # Custom configuration.
+
+    # Increase this to increase the computational cost of password hashing
+    config.bcrypt_cost = BCrypt::Engine::DEFAULT_COST
+
+    # Rails configuration.
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
