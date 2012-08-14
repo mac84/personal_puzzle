@@ -8,6 +8,6 @@ class Task < ActiveRecord::Base
   validates_presence_of :name
 
   default_scope :order => 'deadline_date ASC'
-  delegate :name, :to => :client, :prefix => true
+  delegate :name, :to => :client, :prefix => true, :allow_nil => true
 
 end
