@@ -5,7 +5,6 @@ gem 'sqlite3'
 gem 'bcrypt-ruby', :require => 'bcrypt'
 gem 'launchy'
 gem 'simple_form'
-gem 'elabs_matchers', :git => 'git://github.com/elabs/elabs_matchers.git'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -24,6 +23,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'elabs_matchers', :git => 'git://github.com/elabs/elabs_matchers.git'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'delorean'
