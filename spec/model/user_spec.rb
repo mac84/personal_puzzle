@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-
 describe "User" do
   let(:user) { User.make }
 
@@ -10,8 +8,7 @@ describe "User" do
 
     it "validates confirmation of password" do
       user = User.make(:password =>"1234", :password_confirmation =>"wrong")
-      # user.should have(1).error_on(:password_confirmation)
-      expect { user.save! }.to raise_error{ActiveRecord::RecordInvalid}
+      user.should have(1).error_on(:password)
     end
 
     it "validates presence of password on create" do
@@ -29,10 +26,6 @@ describe "User" do
       user2 = User.make(:email => "foo@bar.com")
       user2.should have(1).error_on(:email)
     end
-  end
-
-  describe "relations" do
-
   end
 
   describe "saving a user" do
