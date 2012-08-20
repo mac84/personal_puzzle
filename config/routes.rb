@@ -12,5 +12,6 @@ PersonalPuzzle::Application.routes.draw do
   resources :clients
   resources :tasks
   resources :completed_shifts
+  resources :password_resets
 
 end
