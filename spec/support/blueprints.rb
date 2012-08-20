@@ -14,3 +14,7 @@ Client.blueprint do
   name            { "name#{sn}" }
 end
 
+
+CompletedShift.blueprint do
+  # Attributes here
+end
