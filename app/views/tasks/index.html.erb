@@ -1,12 +1,109 @@
 <h1>Jobb</h1>
+
+<% content_for :head do %>
+  <script type="text/javascript">
+    function timer(task_id, timer_status) {
+      if($('.counter' + '.' + task_id).hasClass('hasCountdown')) {
+        if (timer_status == "running") {
+          $('.counter' + '.' + task_id).countdown('pause')
+        } else if (timer_status == "paused") {
+          $('.counter' + '.' + task_id).countdown('resume')
+        }
+      } else {
+        var start_time = new Date();
+        $('.counter' + '.' + task_id).countdown({since: start_time, compact: true, format: 'HMS' });
+        $('.shift_duration' + '.' + task_id).html('');
+      }
+    };
+
+    var setProgressBar = function(data){
+      $('.progress' + '.' + i).find('.bar').css('width:' + data.workedPercentage)
+
+    }
+
+    $(document).ready(function() {
+      $.each($.find('.btn.icon-play'), function(i){
+        var timer_status = "unstarted";
+
+        $(this).click(function(){
+          if (timer_status == "running"){
+            $('.progress' + '.' + i).removeClass('progress-striped active');
+            timer(i, timer_status);
+            $(this).toggleClass("icon-pause");
+            timer_status = "paused";
+          } else {
+            $('.progress' + '.' + i).addClass('progress-striped active');
+            timer(i, timer_status);
+            $(this).toggleClass("icon-pause");
+            timer_status = "running";
+          }
+        });
+      });
+
+      $.each($.find('.btn.icon-ok'), function(i){
+        $(this).click(function(){
+          var shift_duration_array = $('.counter' + '.' + i).find('.countdown_row').html().split(":");
+          var counter_duraton = $('.counter' + '.' + i).countdown('getTimes')
+          var shift_duration = (shift_duration_array[0] * 3600) + (shift_duration_array[1] * 60) + (shift_duration_array[2]) * 1;
+
+          $('.counter' + '.' + i).countdown('destroy');
+          $('.shift_duration' + '.' + i).html('Du jobbade i ' + shift_duration + ' sekunder');
+          var task_id = $('.id.hidden' + '.' + i).text();
+
+          $.ajax( {
+            url:        "<%= completed_shifts_path %>",
+            type:       "POST",
+            dataType:   "json",
+            data:       { task_id:task_id, duration:shift_duration },
+            success:    function(data, textStatus, xhr)   {
+                          // alert("Arbetspasset sparat!")
+                          $('.progress' + '.' + i).find('.bar').css('width', data + '%');
+                          console.log(data, i);
+                          console.log($('.progress' + '.' + i).find('.bar').css('width', data + '%'));
+                        },
+            error:      function(request, status, error) {
+                        // alert(request.responseText);
+                  },
+          });
+
+
+        });
+      });
+
+    });
+
+  </script>
+<% end %>
+
 <ul class="unstyled">
-  <% @tasks.each do |t| %>
-    <li><%= link_to t.name, task_path(t) %> åt <%= t.client_name%>, deadline: <%= t.deadline_date %> </li>
-    <button class="btn icon-play pull-left"></button>
-    <div class="progress">
-    <div class="bar"
-       style="width: 60%;"></div>
-    </div>
+  <% @tasks.each_with_index do |t, i| %>
+    <li class="well">
+      <div class="task_info">
+        <%= link_to t.name, task_path(t) %> åt <%= t.client_name%>, deadline: <%= t.deadline_date.to_s(:short) %>
+        <div class="id hidden <%= i %>"> <%= t.id %> </div>
+      </div>
+      <div class="pull-left">
+        <button class="btn icon-play">
+        </button>
+        <button class="btn icon-ok">
+        </button>
+      </div>
+      <div class="progress <%= i %>">
+
+        <div class="bar" style="width: <%= number_to_percentage((t.worked_time / t.work_time) * 100, :precision => 0) %>;">
+        </div>
+      </div>
+      <div>
+        <p>Du har jobbat <%= t.worked_time %> sekunder av totalt <%= t.work_time.round %></p>
+      </div>
+      <div class="counter <%= i %>">
+      </div>
+      <div class="shift_duration <%= i %>">
+      </div>
+    </li>
   <% end %>
 </ul>
+
 <%= link_to "Skapa nytt jobb", new_task_path %>
+
+

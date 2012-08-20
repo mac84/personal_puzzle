@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(:version => 20120814124252) do
     t.datetime "updated_at",    :null => false
   end
 
+  create_table "completed_shifts", :force => true do |t|
+    t.datetime "start_date", :null => false
+    t.integer  "duration",   :null => false
+    t.integer  "task_id",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "tasks", :force => true do |t|
     t.string   "name"
     t.integer  "hourly_rate"
