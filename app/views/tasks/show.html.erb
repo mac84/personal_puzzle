@@ -3,12 +3,13 @@
 <h2>Uppdragsgivare: <%= t.client_name %></h2>
 <h2>Timtaxa: <%= t.hourly_rate %> kr</h2>
 <h2>Arvode: <%= t.fee %> kr</h2>
-<h2>Deadline: <%= t.deadline_date %></h2>
-<ul class="well unstyled">
+<h2>Deadline: <%= t.deadline_date.to_s(:short) %></h2>
+<ul class="well unstyled zebra-striped">
 <h2>Arbetade pass:</h2>
   <% t.completed_shifts.each do |cs| %>
   <li>
-    <p>Datum: <%= cs.start_date %></p>
+    <%= link_to "", completed_shift_path(cs), :method => :delete, :confirm => "Är du säker på att du vill ta bort arbetspasset?", :class => %w[btn btn-danger icon-remove pull-right] %>
+    <p>Starttid: <%= cs.start_date.to_s(:short) %></p>
     <p>Längd: <%= cs.duration %> sekunder </p>
   </li>
   <% end %>

@@ -1,0 +1,29 @@
+<%= simple_nested_form_for @user do |f| %>
+  <%= f.input :email, :label => "E-postadress" %>
+  <%= f.input :password, :label => "Lösenord" %>
+  <%= f.input :password_confirmation, :label => "Lösenordet igen" %>
+  <h2>Vilka dagar i veckan jobbar du?</h2>
+  <div class="well">
+    <%= f.input :monday, :label =>"Måndag" %>
+    <%= f.input :tuesday, :label =>"Tisdag" %>
+    <%= f.input :wednesday, :label =>"Onsdag" %>
+    <%= f.input :thursday, :label =>"Torsdag" %>
+    <%= f.input :friday, :label =>"Fredag" %>
+    <%= f.input :saturday, :label =>"Lördag" %>
+    <%= f.input :sunday, :label =>"Söndag" %>
+  </div>
+  <h2>Vilka tider på dagen jobbar du?</h2>
+  <div class="well">
+    <ul class="unstyled zebra-striped">
+      <%= f.fields_for :work_shifts do |ws| %>
+        <li>
+          <p><%= ws.time_select :start_time%> starttid</p><br />
+          <p><%= ws.number_field :duration %> passets längd (i timmar)</p><br />
+          <%= ws.link_to_remove "Ta bort det här passet" %>
+        </li>
+      <% end %>
+      <p><%= f.link_to_add "Lägg till ett pass", :work_shifts %></p>
+    </ul>
+  </div>
+  <%= f.submit 'Spara användare', :class => 'btn' %>
+<% end %>

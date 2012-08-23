@@ -1,0 +1,40 @@
+<% u = @user %>
+<% current_date = Time.now %>
+<h1><%= u.email %></h1>
+
+<h2>Dina arbetsdagar:</h2>
+<div class="well">
+  <%= "Måndag" if u.monday?  %>
+  <%= "Tisdag" if u.tuesday?  %>
+  <%= "Onsdag" if u.wednesday?  %>
+  <%= "Torsdag" if u.thursday?  %>
+  <%= "Fredag" if u.friday?  %>
+  <%= "Lördag" if u.saturday?  %>
+  <%= "Söndag" if u.sunday?  %>
+</div>
+<h2>Dina arbetstider:</h2>
+<div class="well">
+  <ul>
+    <% u.work_shifts.each do |ws| %>
+      <li><%= ws.start_time.strftime("%H:%M") %> till <%= (ws.start_time + (ws.duration * 60 * 60)).strftime("%H:%M") %>
+      </li>
+    <% end %>
+  </ul>
+  <p>Totalt <%= u.daily_worktime %> timmar per dag</p>
+</div>
+<h2>Disponibel arbetstid denna månad:</h2>
+<div class="well">
+  <%= u.monthly_worktime %> timmar
+</div>
+<h2>Arbetsbeläggning de senaste 4 veckorna:</h2>
+<div class="well">
+  <ul>
+    <% (1..4).each_with_index do |w, i| %>
+    <li>
+      Vecka <%= i.weeks.ago.strftime("%W") %>: <%= u.utilization_between(i.weeks.ago.beginning_of_week, i.weeks.ago.end_of_week) %> %
+    </li>
+    <% end %>
+  </ul>
+</div>
+
+<%= link_to "Redigera användaren", edit_user_path(u) %>

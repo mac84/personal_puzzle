@@ -1,9 +1,11 @@
 class Task < ActiveRecord::Base
-  attr_accessible :date_finished, :deadline_date, :fee, :hourly_rate, :name, :client_id
+  attr_accessible :date_finished, :deadline_date, :fee, :hourly_rate, :name, :client_id, :completed_shifts_attributes
 
   belongs_to :user
   belongs_to :client
   has_many :completed_shifts
+
+  accepts_nested_attributes_for :completed_shifts
 
   validates_presence_of :name
 

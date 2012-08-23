@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120817113346) do
+ActiveRecord::Schema.define(:version => 20120821111912) do
 
   create_table "clients", :force => true do |t|
     t.string   "name",          :null => false
@@ -43,11 +43,26 @@ ActiveRecord::Schema.define(:version => 20120817113346) do
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "password_hash"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "auth_token"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
+    t.boolean  "monday",                 :default => false
+    t.boolean  "tuesday",                :default => false
+    t.boolean  "wednesday",              :default => false
+    t.boolean  "thursday",               :default => false
+    t.boolean  "friday",                 :default => false
+    t.boolean  "saturday",               :default => false
+    t.boolean  "sunday",                 :default => false
+  end
+
+  create_table "work_shifts", :force => true do |t|
+    t.time     "start_time", :null => false
+    t.integer  "duration",   :null => false
+    t.integer  "user_id",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

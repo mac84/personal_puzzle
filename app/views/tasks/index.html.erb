@@ -16,11 +16,6 @@
       }
     };
 
-    var setProgressBar = function(data){
-      $('.progress' + '.' + i).find('.bar').css('width:' + data.workedPercentage)
-
-    }
-
     $(document).ready(function() {
       $.each($.find('.btn.icon-play'), function(i){
         var timer_status = "unstarted";
@@ -58,18 +53,13 @@
             success:    function(data, textStatus, xhr)   {
                           // alert("Arbetspasset sparat!")
                           $('.progress' + '.' + i).find('.bar').css('width', data + '%');
-                          console.log(data, i);
-                          console.log($('.progress' + '.' + i).find('.bar').css('width', data + '%'));
                         },
             error:      function(request, status, error) {
                         // alert(request.responseText);
                   },
           });
-
-
         });
       });
-
     });
 
   </script>
@@ -85,13 +75,18 @@
       <div class="pull-left">
         <button class="btn icon-play">
         </button>
-        <button class="btn icon-ok">
+        <button class="btn icon-ok btn-success">
         </button>
       </div>
       <div class="progress <%= i %>">
 
         <div class="bar" style="width: <%= number_to_percentage((t.worked_time / t.work_time) * 100, :precision => 0) %>;">
         </div>
+      </div>
+      <div class="pull-right">
+         <button class="btn">
+          Klar?
+        </button>
       </div>
       <div>
         <p>Du har jobbat <%= t.worked_time %> sekunder av totalt <%= t.work_time.round %></p>
@@ -105,5 +100,3 @@
 </ul>
 
 <%= link_to "Skapa nytt jobb", new_task_path %>
-
-
