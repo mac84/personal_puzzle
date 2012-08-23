@@ -1,12 +1,14 @@
 # encoding: utf-8
 class PasswordResetsController < ApplicationController
+  skip_before_filter :require_login
+
   def new
   end
 
   def create
     user = User.find_by_email(params[:email])
     user.send_password_reset if user
-    redirect_to root_url, :notice => "Instruktioner om hur du byter lösenord har skickats till e-postadressen du angav."
+    redirect_to log_in_path, :notice => "Instruktioner om hur du byter lösenord har skickats till e-postadressen du angav."
   end
 
   def edit
