@@ -18,3 +18,7 @@ end
 CompletedShift.blueprint do
   # Attributes here
 end
+
+WorkShift.blueprint do
+  # Attributes here
+end
