@@ -40,7 +40,7 @@
             </a>
             <ul class="dropdown-menu">
               <% if current_user %>
-                <li><%= link_to current_user.email, "#" %></li>
+                <li><%= link_to current_user.email, user_path(current_user.id) %></li>
                 <li class="divider"></li>
                 <li><%= button_to "Logga ut", session_path, :id => "log_out", :method => :delete, :class => :btn %></li>
               <% else %>

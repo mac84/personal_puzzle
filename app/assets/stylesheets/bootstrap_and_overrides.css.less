@@ -1,5 +1,5 @@
 @import "twitter/bootstrap/bootstrap";
-body { 
+body {
 	padding-top: 60px;
 }
 
@@ -10,7 +10,7 @@ body {
 @iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not 
+// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
 //       have the proper paths. So for now we use the absolute path.
 @fontAwesomeEotPath: '/assets/fontawesome-webfont.eot';
 @fontAwesomeWoffPath: '/assets/fontawesome-webfont.woff';
@@ -30,3 +30,44 @@ body {
 //
 // Example:
 // @linkColor: #ff0000;
+
+// To make the selects more narrow
+select {
+  width: auto;
+}
+
+// To make the text inputs more narrow
+input, textarea {
+  width: auto;
+}
+
+// Make nested form lists zebra-striped
+.zebra-striped div {
+  background: #efefef;
+  border: 1px solid #eee;
+  margin: 5px;
+  padding: 5px;
+}
+
+.zebra-striped div:nth-child(odd) {
+  background: #fff;
+}
+
+// Make ul:s zebra-striped
+.zebra-striped li {
+  background: #efefef;
+  margin: 2px;
+
+}
+
+.zebra-striped li:nth-child(odd) {
+  background: #fff;
+}
+
+// Min-size for buttons
+.btn {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+//

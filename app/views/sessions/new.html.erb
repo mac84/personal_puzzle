@@ -3,20 +3,21 @@
 
   <%= form_tag session_path do %>
     <p>
-      <%= label_tag :email, 'E-postadress' %> <br />
+      <%= label_tag :email, 'E-postadress' %>
       <%= text_field_tag :email, params[:email] %>
     </p>
     <p>
-      <%= label_tag :password, 'Lösenord' %> <br />
+      <%= label_tag :password, 'Lösenord' %>
       <%= password_field_tag :password %>
     </p>
     <p><%= link_to "Glömt lösenordet?", new_password_reset_path %></p>
     <div class="field">
-      <%= check_box_tag :remember_me, 1, params[:remember_me] %>
-      <%= label_tag :remember_me, "Kom ihåg mig på den här datorn" %>
+      <label class="checkbox inline">
+        <%= check_box_tag :remember_me, 1, params[:remember_me] %>Kom ihåg mig på den här datorn
+      </label>
     </div>
-    <p class="btn button">
-      <%= submit_tag 'Logga in', :id => "login" %>
+    <p>
+      <%= submit_tag 'Logga in', :id => "login", :class => %w[btn button] %>
     </p>
   <% end %>
   <%= link_to "Skapa ny användare", new_user_path %>

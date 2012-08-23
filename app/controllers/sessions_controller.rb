@@ -1,5 +1,7 @@
 # encoding: utf-8
 class SessionsController < ApplicationController
+  skip_before_filter :require_login, :only => [:new, :create]
+
   def new
   end
 
@@ -11,7 +13,7 @@ class SessionsController < ApplicationController
       else
         cookies[:auth_token] = user.auth_token
       end
-      redirect_to root_url, :notice => "Välkommen " + user.email
+      redirect_to root_url, :notice => "Välkommen " + user.email + "!"
     else
       flash.now.alert = "Felaktigt användarnamn eller lösenord"
       render "new"
