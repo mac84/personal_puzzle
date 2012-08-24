@@ -1,5 +1,5 @@
 class Task < ActiveRecord::Base
-  attr_accessible :date_finished, :deadline_date, :fee, :hourly_rate, :name, :client_id, :completed_shifts_attributes
+  attr_accessible :date_finished, :deadline_date, :fee, :hourly_rate, :name, :client_id, :archived, :completed_shifts_attributes
 
   belongs_to :user
   belongs_to :client
@@ -26,5 +26,13 @@ class Task < ActiveRecord::Base
 
   def worked_percentage
     worked_percentage = ((self.worked_time / self.work_time) * 100).round
+  end
+
+  def hourly_pay
+    if worked_time > 0
+      self.fee / worked_time.to_f
+    else
+      self.hourly_rate # Warning! This is a fallback if a task is marked as completed without any completed shifts.
+    end
   end
 end

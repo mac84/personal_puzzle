@@ -1,2 +1,11 @@
-<h1>Clients#show</h1>
-<p>Find me in app/views/clients/show.html.erb</p>
+<% c = @client %>
+<h1><%= c.name %></h1>
+<h2>Standardarvode:</h2>
+<div class="well">
+  <%= c.standard_rate %> kronor i timmen
+</div>
+<h2>Jobb utförda för <%= c.name%>:</h2>
+<div class="well">
+  <%= current_user.number_of_tasks_for(c) %>
+</div>
+<%= link_to ("Redigera " + c.name), edit_client_path(c) %>

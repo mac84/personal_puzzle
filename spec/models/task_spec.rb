@@ -45,4 +45,13 @@ describe "Task" do
       shift1.duration.should eq(20)
     end
   end
+
+  describe "#hourly_pay" do
+    it "should return the hourly pay based on the total duration of all the completed shifts for the task" do
+      task1 = Task.make!(:hourly_rate => '100', :fee => '1000', :date_finished => DateTime.now)
+      cs1 = CompletedShift.make!(:start_date => 1.day.ago, :duration => 10, :task_id => task1.id)
+
+      task1.hourly_pay.should eq(100)
+    end
+  end
 end

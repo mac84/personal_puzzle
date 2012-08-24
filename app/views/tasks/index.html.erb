@@ -1,5 +1,3 @@
-<h1>Jobb</h1>
-
 <% content_for :head do %>
   <script type="text/javascript">
     function timer(task_id, timer_status) {
@@ -65,38 +63,75 @@
   </script>
 <% end %>
 
+<h1>Aktiva jobb</h1>
 <ul class="unstyled">
   <% @tasks.each_with_index do |t, i| %>
-    <li class="well">
-      <div class="task_info">
-        <%= link_to t.name, task_path(t) %> åt <%= t.client_name%>, deadline: <%= t.deadline_date.to_s(:short) %>
-        <div class="id hidden <%= i %>"> <%= t.id %> </div>
-      </div>
-      <div class="pull-left">
-        <button class="btn icon-play">
-        </button>
-        <button class="btn icon-ok btn-success">
-        </button>
-      </div>
-      <div class="progress <%= i %>">
-
-        <div class="bar" style="width: <%= number_to_percentage((t.worked_time / t.work_time) * 100, :precision => 0) %>;">
+    <% if t.date_finished == nil and !t.archived %>
+      <li class="well">
+        <div class="task_info">
+          <%= link_to t.name, task_path(t) %> åt <%= link_to t.client_name, client_path(t) %>, deadline: <%= t.deadline_date.to_s(:short) %>
+          <div class="id hidden <%= i %>"> <%= t.id %> </div>
         </div>
-      </div>
-      <div class="pull-right">
-         <button class="btn">
-          Klar?
-        </button>
-      </div>
-      <div>
-        <p>Du har jobbat <%= t.worked_time %> sekunder av totalt <%= t.work_time.round %></p>
-      </div>
-      <div class="counter <%= i %>">
-      </div>
-      <div class="shift_duration <%= i %>">
-      </div>
-    </li>
+        <div class="pull-left task-control">
+          <button class="btn icon-play">
+          </button>
+          <button class="btn icon-ok btn-success">
+          </button>
+        </div>
+        <div class="progress <%= i %>">
+
+          <div class="bar" style="width: <%= number_to_percentage((t.worked_time / t.work_time) * 100, :precision => 0) %>;">
+          </div>
+        </div>
+        <div class="pull-right">
+            <%= button_to "Klar?", task_path(t, :task => { :date_finished => DateTime.now }), :method => :put, :class => %w[btn btn-success] %>
+        </div>
+        <div class="pull-right">
+            <%= button_to "Arkivera", task_path(t, :task => { :archived => true }), :method => :put, :class => %w[btn] %>
+        </div>
+        <div>
+          <p>Du har jobbat <%= t.worked_time %> sekunder av totalt <%= t.work_time.round %></p>
+        </div>
+        <div class="counter <%= i %>">
+        </div>
+        <div class="shift_duration <%= i %>">
+        </div>
+      </li>
+    <% end %>
   <% end %>
 </ul>
+
+<h2>Klara jobb</h2>
+<div class="well">
+  <% no_finished_tasks = true %>
+  <% @tasks.each do |t| %>
+    <% if t.date_finished %>
+      <li>
+        <p><%= link_to t.name, task_path(t) %></p>
+        <p>Datum klart: <%= t.date_finished.to_s(:short) %></p>
+      </li>
+      <% no_finished_tasks = false %>
+    <% end %>
+  <% end %>
+  <% if no_finished_tasks%>
+    <i>Inga klara jobb!</i>
+  <% end %>
+</div>
+
+<h2>Arkiverade jobb</h2>
+<div class="well">
+  <% no_archived_tasks = true %>
+  <% @tasks.each do |t| %>
+    <% if t.archived %>
+      <li>
+        <p><%= link_to t.name, task_path(t) %></p>
+      </li>
+      <% no_archived_tasks = false %>
+    <% end %>
+  <% end %>
+  <% if no_archived_tasks%>
+    <i>Inga arkiverade jobb!</i>
+  <% end %>
+</div>
 
 <%= link_to "Skapa nytt jobb", new_task_path %>

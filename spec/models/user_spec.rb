@@ -1,3 +1,4 @@
+# encoding: utf-8
 describe "User" do
   let(:user) { User.make }
   let(:task) { Task.make }
@@ -102,7 +103,7 @@ describe "User" do
     end
 
     it "returns the utilization in rounded percentage if a worktime is set and work shifts has been completed" do
-      client1 = Client.make!
+      client1 = Client.make!(:user => user)
       task1 = Task.make!(:client => client1, :user => user)
 
       task1.completed_shifts.new(:start_date => 1.day.ago, :duration => 2)
@@ -120,6 +121,48 @@ describe "User" do
       # A total of 4 hours in completed work shifts last 7 days
 
       user.utilization_between(7.days.ago, Time.now).should eq(33)
+    end
+  end
+
+  describe "#most_profitable_client" do
+    before do
+      @client1 = Client.make!(:user => user)
+      @client2 = Client.make!(:user => user)
+      @client3 = Client.make!(:user => user)
+      @task1 = Task.make!(:client => @client1, :user => user, :hourly_rate => '100', :fee => '1000')
+      @task2 = Task.make!(:client => @client2, :user => user, :hourly_rate => '200', :fee => '3000')
+      @task3 = Task.make!(:client => @client3, :user => user, :hourly_rate => '300', :fee => '4000')
+      @task4 = Task.make!(:client => @client3, :user => user, :hourly_rate => '300', :fee => '2000')
+
+      cs1 = CompletedShift.make!(:start_date => 1.day.ago,  :duration => 2, :task_id => @task1.id)
+      cs2 = CompletedShift.make!(:start_date => 2.days.ago, :duration => 2, :task_id => @task1.id)
+      cs3 = CompletedShift.make!(:start_date => 3.days.ago, :duration => 2, :task_id => @task2.id)
+      cs4 = CompletedShift.make!(:start_date => 4.days.ago, :duration => 2, :task_id => @task2.id)
+      cs5 = CompletedShift.make!(:start_date => 5.days.ago, :duration => 2, :task_id => @task3.id)
+      cs6 = CompletedShift.make!(:start_date => 5.days.ago, :duration => 4, :task_id => @task4.id)
+    end
+
+    it "returns nothing if no task is finished" do
+      error = "Inga slutförda jobb ännu!"
+      user.most_profitable_client.should eq(error)
+    end
+
+    it "returns only one client if one task is finished, that task's client" do
+      @task1.update_column('date_finished', DateTime.now)
+      @task1.save
+      user.most_profitable_client.should eq(@client1)
+    end
+
+    it "returns the most profitable client if more than one task is finished" do
+      @task1.update_column('date_finished', DateTime.now)
+      @task2.update_column('date_finished', DateTime.now)
+      @task3.update_column('date_finished', DateTime.now)
+      @task4.update_column('date_finished', DateTime.now)
+      @task1.save
+      @task2.save
+      @task3.save
+      @task4.save
+      user.most_profitable_client.should eq(@client3)
     end
   end
 end

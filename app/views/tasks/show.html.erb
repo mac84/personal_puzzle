@@ -4,15 +4,35 @@
 <h2>Timtaxa: <%= t.hourly_rate %> kr</h2>
 <h2>Arvode: <%= t.fee %> kr</h2>
 <h2>Deadline: <%= t.deadline_date.to_s(:short) %></h2>
-<ul class="well unstyled zebra-striped">
-<h2>Arbetade pass:</h2>
-  <% t.completed_shifts.each do |cs| %>
-  <li>
-    <%= link_to "", completed_shift_path(cs), :method => :delete, :confirm => "Är du säker på att du vill ta bort arbetspasset?", :class => %w[btn btn-danger icon-remove pull-right] %>
-    <p>Starttid: <%= cs.start_date.to_s(:short) %></p>
-    <p>Längd: <%= cs.duration %> sekunder </p>
-  </li>
+<div class="well well-small">
+
+  <% if t.date_finished != nil %>
+    <h2>Status: Klart!</h2>
+    <%= button_to "Återaktivera", task_path(t, :task => { :date_finished => :null }), :method => :put, :class => %w[btn btn-primary] %>
+  <% elsif t.archived %>
+    <h2>Status: Arkiverat!</h2>
+    <%= button_to "Återaktivera", task_path(t, :task => { :archived => false }), :method => :put, :class => %w[btn btn-primary] %>
+  <% else %>
+    <h2>Status: Aktivt!</h2>
+    <%= button_to "Arkivera?", task_path(t, :task => { :archived => true }), :method => :put, :class => %w[btn btn-primary] %>
   <% end %>
-</ul>
+</div>
+<h2>Arbetade pass:</h2>
+<div class="well">
+  <% no_finished_shifts = true %>
+  <ul class="unstyled zebra-striped">
+    <% t.completed_shifts.each do |cs| %>
+      <li>
+        <%= link_to "", completed_shift_path(cs), :method => :delete, :confirm => "Är du säker på att du vill ta bort arbetspasset?", :class => %w[btn btn-danger icon-remove pull-right] %>
+        <p>Starttid: <%= cs.start_date.to_s(:short) %></p>
+        <p>Längd: <%= cs.duration %> sekunder </p>
+      </li>
+      <% no_finished_shifts = false %>
+    <% end %>
+  </ul>
+  <% if no_finished_shifts%>
+    <p>Inga arbetade pass för "<%= t.name %>" ännu!</p>
+  <% end %>
+</div>
 
 <%= link_to "Redigera jobbet", edit_task_path(t) %>

@@ -1,10 +1,11 @@
+# encoding: utf-8
 class User < ActiveRecord::Base
   Password = BCrypt::Password
 
   attr_accessible :email, :password, :password_confirmation, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :work_shifts_attributes
 
   has_many :tasks,       :dependent => :destroy
-  has_many :clients,     :through => :tasks
+  has_many :clients
   has_many :work_shifts, :dependent => :destroy
   has_many :completed_shifts, :through => :tasks
 
@@ -112,8 +113,60 @@ class User < ActiveRecord::Base
     utilization
   end
 
-  def most_profitable_client
+  def number_of_tasks_for(client)
+    self.tasks.where(:client_id => client.id).size
+  end
 
+  def has_any_completed_tasks?
+    self.tasks.where("date_finished is NOT NULL").size > 0
+  end
+
+  def most_profitable_client
+    if self.tasks.where("date_finished is NOT NULL").size > 0
+      clients_and_their_hourly_pay = Hash.new(0)
+
+      number_of_finished_tasks_per_client.each_with_index do |n, i|
+        clients_and_their_hourly_pay[n[0][0]] = accumulated_hourly_pay[[n[0][0]]].to_f / number_of_finished_tasks_per_client[[n[0][0]]]
+      end
+
+      clients_and_their_hourly_pay.sort_by {|keys, values| values}.reverse
+      # Client.find_by_name(clients_and_their_hourly_pay.max[0]) if !clients_and_their_hourly_pay.empty?
+    else
+      error = "Inga slutförda jobb ännu!"
+    end
+  end
+
+  def most_worked_for_client
+    if self.tasks.where("date_finished is NOT NULL").size > 0
+      clients_and_the_hours_spent_on_them = Hash.new(0)
+
+      number_of_finished_tasks_per_client.each_with_index do |n, i|
+        clients_and_the_hours_spent_on_them[n[0][0]] = accumulated_work_hours[[n[0][0]]]
+      end
+
+      clients_and_the_hours_spent_on_them.sort_by {|keys, values| values}.reverse
+      # Client.find_by_name(clients_and_their_hourly_pay.max[0]) if !clients_and_their_hourly_pay.empty?
+    else
+      error = "Inga slutförda jobb ännu!"
+    end
+  end
+
+  def accumulated_hourly_pay
+    self.tasks.where("date_finished is NOT NULL").each_with_object(Hash.new(0)) do |ft, result|
+      result[[ft.client_name]] += ft.hourly_pay
+    end
+  end
+
+  def accumulated_work_hours
+    self.tasks.where("date_finished is NOT NULL").each_with_object(Hash.new(0)) do |ft, result|
+      result[[ft.client_name]] += ft.worked_time
+    end
+  end
+
+  def number_of_finished_tasks_per_client
+    self.tasks.where("date_finished is NOT NULL").each_with_object(Hash.new(0)) do |ft, result|
+      result[[ft.client_name]] += 1
+    end
   end
 
 end

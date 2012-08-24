@@ -1,7 +1,31 @@
 <h1>Uppdragsgivare</h1>
 <ul>
   <% @clients.each do |c| %>
-    <li><%= link_to c.name, edit_client_path(c) %></li>
+    <li><%= link_to c.name, client_path(c) %></li>
   <% end %>
 </ul>
+
+<% if current_user.has_any_completed_tasks? %>
+  <div id="client-statistics">
+    <h2>Mest lönsamma kund (högst arvode per timme):</h2>
+    <div class="well">
+      <ul>
+        <% current_user.most_profitable_client.each do |prof| %>
+          <li><%= prof[0] %>, med <%= prof[1].round%> kronor i timmen</li>
+        <% end %>
+      </ul>
+    </div>
+    <h2>Kund du jobbat mest för:</h2>
+    <div class="well">
+      <ul>
+        <% current_user.most_worked_for_client.each do |prof| %>
+          <li><%= prof[0] %>: <%= prof[1].round%> timmar</li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% else %>
+  <p><i>När du slutfört ditt första jobb kan du se statistik om uppdragsgivare här!</i></p>
+<% end %>
+
 <%= link_to "Lägg till uppdragsgivare", new_client_path %>

@@ -1,5 +1,6 @@
 describe "Client" do
   let(:client) { Client.make }
+  let(:user) { User.make }
 
   describe "validations" do
     it "can be valid" do
