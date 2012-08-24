@@ -7,16 +7,18 @@ User.blueprint do
 end
 
 Task.blueprint do
-  name            { "name#{sn}" }
+  name            { "Task#{sn}" }
 end
 
 Client.blueprint do
-  name            { "name#{sn}" }
+  name            { "Client#{sn}" }
+  user_id         { User.make! }
 end
 
-
 CompletedShift.blueprint do
-  # Attributes here
+  start_date      { DateTime.now }
+  duration        { "#{sn}" }
+  task_id         { Task.make! }
 end
 
 WorkShift.blueprint do

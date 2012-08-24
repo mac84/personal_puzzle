@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120821111912) do
+ActiveRecord::Schema.define(:version => 20120824075313) do
 
   create_table "clients", :force => true do |t|
     t.string   "name",          :null => false
     t.integer  "standard_rate"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "user_id",       :null => false
   end
 
   create_table "completed_shifts", :force => true do |t|
@@ -34,10 +35,11 @@ ActiveRecord::Schema.define(:version => 20120821111912) do
     t.integer  "fee"
     t.datetime "deadline_date"
     t.datetime "date_finished"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.integer  "user_id"
     t.integer  "client_id"
+    t.boolean  "archived",      :default => false
   end
 
   create_table "users", :force => true do |t|
