@@ -8,10 +8,10 @@ class ClientsController < ApplicationController
   end
 
   def create
-    @client = Client.new(params[:client])
+    @client = current_user.clients.new(params[:client])
 
     if @client.save
-      redirect_to root_url, :notice => "Uppdragsgivaren \"" + @client.name + "\" sparad!"
+      redirect_to clients_url, :notice => "Uppdragsgivaren \"" + @client.name + "\" sparad!"
     else
       render "new"
     end

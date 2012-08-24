@@ -28,7 +28,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     if @task.update_attributes(params[:task])
-      redirect_to root_url, :notice => "Jobbet \"" + @task.name + "\" uppdaterat!"
+      redirect_to tasks_url, :notice => "Jobbet \"" + @task.name + "\" uppdaterat!"
     else
       render "edit"
     end
