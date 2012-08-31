@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Task:</b>
+  <%= @scheduled_shift.task_id %>
+</p>
+
+<p>
+  <b>Start date:</b>
+  <%= @scheduled_shift.start_date %>
+</p>
+
+<p>
+  <b>Duration:</b>
+  <%= @scheduled_shift.duration %>
+</p>
+
+
+<%= link_to 'Edit', edit_scheduled_shift_path(@scheduled_shift) %> |
+<%= link_to 'Back', scheduled_shifts_path %>

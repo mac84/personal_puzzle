@@ -1,0 +1,18 @@
+<% ss = @scheduled_shifts %>
+<% last_ss_date = @last_ss_date %>
+
+<div class="well">
+  <% if !current_user.schedule_up_to_date? %>
+    <p>Din planering är inte uppdaterad!</p>
+    <%= button_to "Uppdatera", new_schedule_path, :method => :get, :class => %w[btn btn-danger] %>
+  <% else %>
+    <p>Din planering är uppdaterad.</p><p> Uppdatera manuellt:</p>
+    <%= button_to "Uppdatera", new_schedule_path, :method => :get, :class => %w[btn] %>
+  <% end %>
+</div>
+
+<%= link_to "Veckovy", schedules_path(:view_type => :week) %>
+<%= link_to "Månadsvy", schedules_path(:view_type => :month) %>
+
+<%= render :partial => "#{@view_type}_schedule", :locals => { :ss => @scheduled_shifts, :last_ss_date => @last_ss_date }  %>
+

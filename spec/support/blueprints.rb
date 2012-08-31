@@ -22,5 +22,11 @@ CompletedShift.blueprint do
 end
 
 WorkShift.blueprint do
+  start_time      { Time.now }
+  duration        { "#{sn}" }
+  user_id         { User.make! }
+end
+
+ScheduledShift.blueprint do
   # Attributes here
 end

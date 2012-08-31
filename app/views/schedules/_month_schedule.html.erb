@@ -1,0 +1,25 @@
+<% now = Time.now %>
+<% first_day = now.beginning_of_month.to_datetime %>
+
+<h1>Din månadsplanering</h1>
+
+<ul class="unstyled">
+  <% if last_ss_date %>
+    <% first_day.step(first_day + 31, 7) do |week| %>
+      <li>
+        <div class="well">
+          <% monday = week.beginning_of_week %>
+          <h3>Vecka <%= week.strftime("%W") %>, <%= week.beginning_of_week.strftime("%e/%-m") %> - <%= week.end_of_week.strftime("%e/%-m") %> - <%= week.strftime("%Y") %></h3>
+          <% ss.each do |s| %>
+            <ul>
+              <% if s.start_date > week.beginning_of_week && s.start_date < week.end_of_week %>
+                <li><%= s.start_date.getlocal.strftime("%A, %H:%M") %>: <%= s.task_name %>, <%= s.duration %> timmar</li>
+              <% end %>
+            </ul>
+            <!-- <li>Inga inplanerade skift idag!</li> -->
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

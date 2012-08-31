@@ -1,0 +1,25 @@
+<% now = Time.now %>
+<% monday = now.beginning_of_week.to_datetime %>
+
+<h1>Din veckoplanering</h1>
+
+<ul class="unstyled">
+  <% if last_ss_date %>
+    <% monday.step(monday + 6, 1) do |day| %>
+      <li>
+        <div class="well">
+          <h2><%= day.strftime("%A") %> <%= day.strftime("%e %B") %></h2>
+          <% ss.each do |s| %>
+            <ul>
+              <% if s.start_date.day == day.day %>
+                <li><%= s.start_date.getlocal.strftime("%H:%M") %>: <%= s.task_name %>, <%= s.duration %> timmar</li>
+              <% end %>
+            </ul>
+          <% end %>
+              <!-- <li>Inga inplanerade skift idag!</li> -->
+        </div>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+

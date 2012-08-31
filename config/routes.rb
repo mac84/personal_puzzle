@@ -1,5 +1,6 @@
 PersonalPuzzle::Application.routes.draw do
 
+
   get "work_shifts/create"
 
   get "/log_in" => "sessions#new", :as => "log_in"
@@ -15,5 +16,7 @@ PersonalPuzzle::Application.routes.draw do
   resources :tasks
   resources :completed_shifts
   resources :password_resets
+  resources :scheduled_shifts
+  resources :schedules
 
 end

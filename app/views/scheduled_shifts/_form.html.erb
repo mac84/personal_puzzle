@@ -1,0 +1,13 @@
+<%= simple_form_for(@scheduled_shift) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :task_id %>
+    <%= f.input :start_date %>
+    <%= f.input :duration %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824075313) do
+ActiveRecord::Schema.define(:version => 20120824112740) do
 
   create_table "clients", :force => true do |t|
     t.string   "name",          :null => false
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(:version => 20120824075313) do
     t.datetime "start_date", :null => false
     t.integer  "duration",   :null => false
     t.integer  "task_id",    :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "scheduled_shifts", :force => true do |t|
+    t.integer  "task_id",    :null => false
+    t.datetime "start_date", :null => false
+    t.integer  "duration",   :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -45,18 +53,19 @@ ActiveRecord::Schema.define(:version => 20120824075313) do
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "password_hash"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.string   "auth_token"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
-    t.boolean  "monday",                 :default => false
-    t.boolean  "tuesday",                :default => false
-    t.boolean  "wednesday",              :default => false
-    t.boolean  "thursday",               :default => false
-    t.boolean  "friday",                 :default => false
-    t.boolean  "saturday",               :default => false
-    t.boolean  "sunday",                 :default => false
+    t.boolean  "monday",                     :default => false
+    t.boolean  "tuesday",                    :default => false
+    t.boolean  "wednesday",                  :default => false
+    t.boolean  "thursday",                   :default => false
+    t.boolean  "friday",                     :default => false
+    t.boolean  "saturday",                   :default => false
+    t.boolean  "sunday",                     :default => false
+    t.integer  "min_scheduled_shift_length", :default => 2
   end
 
   create_table "work_shifts", :force => true do |t|
