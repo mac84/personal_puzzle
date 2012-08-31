@@ -19,7 +19,6 @@
 </div>
 <h2>Arbetade pass:</h2>
 <div class="well">
-  <% no_finished_shifts = true %>
   <ul class="unstyled zebra-striped">
     <% t.completed_shifts.each do |cs| %>
       <li>
@@ -27,10 +26,9 @@
         <p>Starttid: <%= cs.start_date.to_s(:short) %></p>
         <p>Längd: <%= cs.duration %> sekunder </p>
       </li>
-      <% no_finished_shifts = false %>
     <% end %>
   </ul>
-  <% if no_finished_shifts%>
+  <% if t.completed_shifts.size == 0 %>
     <p>Inga arbetade pass för "<%= t.name %>" ännu!</p>
   <% end %>
 </div>
