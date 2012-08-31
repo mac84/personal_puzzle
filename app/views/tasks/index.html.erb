@@ -1,47 +1,45 @@
 <% content_for :head do %>
   <script type="text/javascript">
-    function timer(task_id, timer_status) {
-      if($('.counter' + '.' + task_id).hasClass('hasCountdown')) {
+    function timer(box, timer_status) {
+      if($(box).find('.counter').hasClass('hasCountdown')) {
         if (timer_status == "running") {
-          $('.counter' + '.' + task_id).countdown('pause')
+          $(box).find('.counter').countdown('pause')
         } else if (timer_status == "paused") {
-          $('.counter' + '.' + task_id).countdown('resume')
+          $(box).find('.counter').countdown('resume')
         }
       } else {
         var start_time = new Date();
-        $('.counter' + '.' + task_id).countdown({since: start_time, compact: true, format: 'HMS' });
-        $('.shift_duration' + '.' + task_id).html('');
+        $(box).find('.counter').countdown({since: start_time, compact: true, format: 'HMS' });
+        $(box).find('.shift_duration').html('');
       }
     };
 
     $(document).ready(function() {
-      $.each($.find('.btn.icon-play'), function(i){
+      $('.timer-box').each(function(i, box){
         var timer_status = "unstarted";
 
-        $(this).click(function(){
+        $(box).find('.btn.icon-play').click(function(){
           if (timer_status == "running"){
-            $('.progress' + '.' + i).removeClass('progress-striped active');
-            timer(i, timer_status);
+            $(box).find('.progress').removeClass('progress-striped active');
+            timer(box, timer_status);
             $(this).toggleClass("icon-pause");
             timer_status = "paused";
           } else {
-            $('.progress' + '.' + i).addClass('progress-striped active');
-            timer(i, timer_status);
+            $(box).find('.progress').addClass('progress-striped active');
+            timer(box, timer_status);
             $(this).toggleClass("icon-pause");
             timer_status = "running";
           }
         });
-      });
 
-      $.each($.find('.btn.icon-ok'), function(i){
-        $(this).click(function(){
-          var shift_duration_array = $('.counter' + '.' + i).find('.countdown_row').html().split(":");
-          var counter_duraton = $('.counter' + '.' + i).countdown('getTimes')
+        $(box).find('.btn.icon-ok').click(function(){
+          var shift_duration_array = $(box).find('.counter').find('.countdown_row').html().split(":");
+          var counter_duraton = $(box).find('.counter').countdown('getTimes')
           var shift_duration = (shift_duration_array[0] * 3600) + (shift_duration_array[1] * 60) + (shift_duration_array[2]) * 1;
 
-          $('.counter' + '.' + i).countdown('destroy');
-          $('.shift_duration' + '.' + i).html('Du jobbade i ' + shift_duration + ' sekunder');
-          var task_id = $('.id.hidden' + '.' + i).text();
+          $(box).find('.counter').countdown('destroy');
+          $(box).find('.shift_duration').html('Du jobbade i ' + shift_duration + ' sekunder');
+          var task_id = $(box).find('.id.hidden').text();
 
           $.ajax( {
             url:        "<%= completed_shifts_path %>",
@@ -50,10 +48,10 @@
             data:       { task_id:task_id, duration:shift_duration },
             success:    function(data, textStatus, xhr)   {
                           // alert("Arbetspasset sparat!")
-                          $('.progress' + '.' + i).find('.bar').css('width', data + '%');
+                          $(box).find('.progress').find('.bar').css('width', data.worked_percentage + '%');
+                          $(box).find('.worked-time').html('<p>Du har jobbat ' + data.worked_time + ' sekunder av totalt ' + data.work_time + '</p>');
                         },
             error:      function(request, status, error) {
-                        // alert(request.responseText);
                   },
           });
         });
@@ -65,12 +63,13 @@
 
 <h1>Aktiva jobb</h1>
 <ul class="unstyled">
-  <% @tasks.each_with_index do |t, i| %>
+  <% no_active_tasks = true %>
+  <% @tasks.each do |t| %>
     <% if t.date_finished == nil and !t.archived %>
-      <li class="well">
+      <li class="well timer-box">
         <div class="task_info">
           <%= link_to t.name, task_path(t) %> åt <%= link_to t.client_name, client_path(t) %>, deadline: <%= t.deadline_date.to_s(:short) %>
-          <div class="id hidden <%= i %>"> <%= t.id %> </div>
+          <div class="id hidden"> <%= t.id %> </div>
         </div>
         <div class="pull-left task-control">
           <button class="btn icon-play">
@@ -78,7 +77,7 @@
           <button class="btn icon-ok btn-success">
           </button>
         </div>
-        <div class="progress <%= i %>">
+        <div class="progress">
 
           <div class="bar" style="width: <%= number_to_percentage((t.worked_time / t.work_time) * 100, :precision => 0) %>;">
           </div>
@@ -89,49 +88,61 @@
         <div class="pull-right">
             <%= button_to "Arkivera", task_path(t, :task => { :archived => true }), :method => :put, :class => %w[btn] %>
         </div>
-        <div>
+        <div class='worked-time'>
           <p>Du har jobbat <%= t.worked_time %> sekunder av totalt <%= t.work_time.round %></p>
         </div>
-        <div class="counter <%= i %>">
+        <div class="counter">
         </div>
-        <div class="shift_duration <%= i %>">
+        <div class="shift_duration">
         </div>
       </li>
+      <% no_active_tasks = false %>
     <% end %>
+  <% end %>
+  <% if no_active_tasks %>
+    <ul class="unstyled">
+      <div class="well">
+        <i>Inga aktiva jobb!</i>
+      </div>
+    </ul>
   <% end %>
 </ul>
 
 <h2>Klara jobb</h2>
 <div class="well">
-  <% no_finished_tasks = true %>
-  <% @tasks.each do |t| %>
-    <% if t.date_finished %>
-      <li>
-        <p><%= link_to t.name, task_path(t) %></p>
-        <p>Datum klart: <%= t.date_finished.to_s(:short) %></p>
-      </li>
-      <% no_finished_tasks = false %>
+  <ul class="unstyled">
+    <% no_finished_tasks = true %>
+    <% @tasks.each do |t| %>
+      <% if t.date_finished %>
+        <li>
+          <p><%= link_to t.name, task_path(t) %></p>
+          <p>Datum klart: <%= t.date_finished.to_s(:short) %></p>
+        </li>
+        <% no_finished_tasks = false %>
+      <% end %>
     <% end %>
-  <% end %>
-  <% if no_finished_tasks%>
-    <i>Inga klara jobb!</i>
-  <% end %>
+    <% if no_finished_tasks%>
+      <i>Inga klara jobb!</i>
+    <% end %>
+  </ul>
 </div>
 
 <h2>Arkiverade jobb</h2>
 <div class="well">
-  <% no_archived_tasks = true %>
-  <% @tasks.each do |t| %>
-    <% if t.archived %>
-      <li>
-        <p><%= link_to t.name, task_path(t) %></p>
-      </li>
-      <% no_archived_tasks = false %>
+  <ul class="unstyled">
+    <% no_archived_tasks = true %>
+    <% @tasks.each do |t| %>
+      <% if t.archived %>
+        <li>
+          <p><%= link_to t.name, task_path(t) %></p>
+        </li>
+        <% no_archived_tasks = false %>
+      <% end %>
     <% end %>
-  <% end %>
-  <% if no_archived_tasks%>
-    <i>Inga arkiverade jobb!</i>
-  <% end %>
+    <% if no_archived_tasks%>
+      <i>Inga arkiverade jobb!</i>
+    <% end %>
+  </ul>
 </div>
 
 <%= link_to "Skapa nytt jobb", new_task_path %>
