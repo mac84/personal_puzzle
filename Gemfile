@@ -6,6 +6,7 @@ gem 'bcrypt-ruby', :require => 'bcrypt'
 gem 'launchy'
 gem 'simple_form'
 gem 'nested_form'
+gem 'by_star'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
