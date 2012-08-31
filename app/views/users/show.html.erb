@@ -22,6 +22,11 @@
   </ul>
   <p>Totalt <%= u.daily_worktime %> timmar per dag</p>
 </div>
+<h2>Minimumlängd på inplanerade arbetspass i planeringen</h2>
+<div class="well">
+  <p>Planeringsfunktionen delar in uppdragen i arbetspass och portionerar ut över din planering. Det här är minimilängd för ett sådant arbetspass. </p>
+  <%= u.min_scheduled_shift_length %> timmar
+</div>
 <h2>Disponibel arbetstid denna månad:</h2>
 <div class="well">
   <%= u.monthly_worktime %> timmar

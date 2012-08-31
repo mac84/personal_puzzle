@@ -2,6 +2,11 @@
   <%= f.input :email, :label => "E-postadress" %>
   <%= f.input :password, :label => "Lösenord" %>
   <%= f.input :password_confirmation, :label => "Lösenordet igen" %>
+  <h2>Minimumlängd på inplanerade arbetspass i planeringen</h2>
+  <div class="well">
+    <p>Planeringsfunktionen delar in uppdragen i arbetspass och portionerar ut över din planering. Här kan du bestämma minimilängd för ett sådant arbetspass. </p>
+    <%= f.input :min_scheduled_shift_length, :label => "Antal timmar:", :collection => 1..24, :include_blank => false %>
+  </div>
   <h2>Vilka dagar i veckan jobbar du?</h2>
   <div class="well">
     <%= f.input :monday, :label =>"Måndag" %>
