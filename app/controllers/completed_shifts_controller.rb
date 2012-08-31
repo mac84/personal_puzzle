@@ -9,8 +9,13 @@ class CompletedShiftsController < ApplicationController
     @tasks = current_user.tasks.all
 
     if @completed_shift.save
-      worked_percentage = Task.find(params[:task_id]).worked_percentage
-      render :json => worked_percentage
+      @task = Task.find(params[:task_id])
+
+      respond_to do |format|
+        format.html
+        format.json
+      end
+
     else
       nil
     end

@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks = current_user.tasks.all
+    @tasks = current_user.tasks.order('deadline_date ASC')
   end
 
   def new

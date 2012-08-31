@@ -66,9 +66,10 @@ module PersonalPuzzle
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    # Generate a blueprint for every new model created
     config.generators do |g|
+      # Generate a blueprint for every new model created
       g.fixture_replacement :machinist
     end
+
   end
 end

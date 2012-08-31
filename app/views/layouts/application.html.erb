@@ -16,7 +16,6 @@
     <%= javascript_include_tag "application" %>
     <%= content_for?(:head) ? yield(:head) : nil %>
 
-
   </head>
   <body>
     <div class="navbar navbar-fixed-top">
@@ -55,7 +54,7 @@
               <% if current_user %>
                 <li><%= link_to "Jobb", tasks_path %></li>
                 <li><%= link_to "Uppdragsgivare", clients_path  %></li>
-                <li><%= link_to "Planering", "/path3"  %></li>
+                <li><%= link_to "Planering", schedules_path %></li>
               <% else %>
                 <li><%= link_to "Perzonal Pazzle", "/path3"  %></li>
               <% end %>

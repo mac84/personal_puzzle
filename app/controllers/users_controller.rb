@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if @user.save
-      cookies[:auth_token] = user.auth_token
+      cookies[:auth_token] = @user.auth_token
       redirect_to root_url, :notice => "Användare skapad! Välkommen!"
     else
       render "new"

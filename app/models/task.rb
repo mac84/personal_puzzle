@@ -3,13 +3,14 @@ class Task < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :client
-  has_many :completed_shifts
+  has_many :completed_shifts, :dependent => :destroy
+  has_many :scheduled_shifts, :dependent => :destroy
 
   accepts_nested_attributes_for :completed_shifts
 
   validates_presence_of :name
 
-  default_scope :order => 'deadline_date ASC'
+  # default_scope :order => 'deadline_date ASC' # Applies to ALL calls to task model, even completed_shifts/scheduled_shifts
   delegate :name, :to => :client, :prefix => true, :allow_nil => true
 
   def worked_time
@@ -35,4 +36,6 @@ class Task < ActiveRecord::Base
       self.hourly_rate # Warning! This is a fallback if a task is marked as completed without any completed shifts.
     end
   end
+
+
 end
