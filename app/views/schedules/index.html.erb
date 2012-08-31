@@ -1,5 +1,6 @@
 <% ss = @scheduled_shifts %>
 <% last_ss_date = @last_ss_date %>
+<% vacation_dates = @vacation_dates %>
 
 <div class="well">
   <% if !current_user.schedule_up_to_date? %>
@@ -13,6 +14,7 @@
 
 <%= link_to "Veckovy", schedules_path(:view_type => :week) %>
 <%= link_to "Månadsvy", schedules_path(:view_type => :month) %>
+<%= link_to "Alla inbokade skift", schedules_path(:view_type => :all) %>
 
 <%= render :partial => "#{@view_type}_schedule", :locals => { :ss => @scheduled_shifts, :last_ss_date => @last_ss_date }  %>
 

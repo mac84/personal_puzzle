@@ -199,6 +199,40 @@ describe "User" do
       @user2.scheduled_shifts.size.should eq(5)
     end
 
+    describe "#works_on" do
+      before do
+        @day_of_week = Time.now.strftime("%A").downcase #The user works on the day the test is run
+        @now = Time.now
+        @user2 = User.make!(:"#{@day_of_week}" => true)
+      end
+
+      it "should return false if today is not a workday and not vacation" do
+        user2 = User.make!(:"#{@day_of_week}" => false)
+        user2.works_on(@now).should be_false
+      end
+
+      it "should return false if today is     a workday and     vacation" do
+        user2 = User.make!(:"#{@day_of_week}" => true)
+        vacation = Vacation.make!(:start_date => DateTime.now, :end_date => DateTime.now + 2.days, :user_id => user2.id)
+
+        user2.works_on(@now).should be_false
+      end
+
+      it "should return false if today is not a workday and     vacation" do
+        user2 = User.make!(:"#{@day_of_week}" => false)
+        vacation = Vacation.make!(:start_date => DateTime.now, :end_date => DateTime.now + 2.days, :user_id => user2.id)
+
+        user2.works_on(@now).should be_false
+      end
+
+
+      it "should return true if today is      a workday and not vacation" do
+
+        @user2.works_on(@now).should be_true
+      end
+    end
+
+
     describe "#work_time_left" do
       after(:each) { back_to_the_present }
 

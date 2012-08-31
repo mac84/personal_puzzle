@@ -2,11 +2,13 @@
   <%= f.input :email, :label => "E-postadress" %>
   <%= f.input :password, :label => "Lösenord" %>
   <%= f.input :password_confirmation, :label => "Lösenordet igen" %>
+
   <h2>Minimumlängd på inplanerade arbetspass i planeringen</h2>
   <div class="well">
     <p>Planeringsfunktionen delar in uppdragen i arbetspass och portionerar ut över din planering. Här kan du bestämma minimilängd för ett sådant arbetspass. </p>
     <%= f.input :min_scheduled_shift_length, :label => "Antal timmar:", :collection => 1..24, :include_blank => false %>
   </div>
+
   <h2>Vilka dagar i veckan jobbar du?</h2>
   <div class="well">
     <%= f.input :monday, :label =>"Måndag" %>
@@ -17,6 +19,20 @@
     <%= f.input :saturday, :label =>"Lördag" %>
     <%= f.input :sunday, :label =>"Söndag" %>
   </div>
+  <h2>Inbokade semesterdagar</h2>
+  <div class="well">
+    <ul class="unstyled zebra-striped">
+      <%= f.fields_for :vacations do |v| %>
+        <li>
+          <p><%= v.date_select :start_date %> startdatum</p><br />
+          <p><%= v.date_select :end_date %> slutdatum</p><br />
+          <%= v.link_to_remove "Ta bort det här passet" %>
+        </li>
+      <% end %>
+      <p><%= f.link_to_add "Lägg till ett semesterpass", :vacations %></p>
+    </ul>
+  </div>
+
   <h2>Vilka tider på dagen jobbar du?</h2>
   <div class="well">
     <ul class="unstyled zebra-striped">
@@ -30,5 +46,6 @@
       <p><%= f.link_to_add "Lägg till ett pass", :work_shifts %></p>
     </ul>
   </div>
+
   <%= f.submit 'Spara användare', :class => 'btn' %>
 <% end %>

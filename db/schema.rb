@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824112740) do
+ActiveRecord::Schema.define(:version => 20120831074013) do
 
   create_table "clients", :force => true do |t|
     t.string   "name",          :null => false
@@ -66,6 +66,14 @@ ActiveRecord::Schema.define(:version => 20120824112740) do
     t.boolean  "saturday",                   :default => false
     t.boolean  "sunday",                     :default => false
     t.integer  "min_scheduled_shift_length", :default => 2
+  end
+
+  create_table "vacations", :force => true do |t|
+    t.datetime "start_date", :null => false
+    t.integer  "user_id",    :null => false
+    t.datetime "end_date",   :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "work_shifts", :force => true do |t|

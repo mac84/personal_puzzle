@@ -1,0 +1,18 @@
+<% now = Time.now %>
+<% first_day = now.beginning_of_month.to_datetime %>
+
+<h1>Alla inbokade pass</h1>
+
+<ul class="unstyled">
+      <li>
+        <div class="well">
+          <% ss.reverse.each do |s| %>
+          <h3><%= s.start_date.strftime("%A, %e/%-m") %></h3>
+            <ul>
+              <li><%= s.start_date.getlocal.strftime("%H:%M") %>: <%= s.task_name %>, <%= s.duration %> timmar</li>
+            </ul>
+            <!-- <li>Inga inplanerade skift idag!</li> -->
+          <% end %>
+        </div>
+      </li>
+</ul>

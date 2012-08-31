@@ -9,12 +9,16 @@
       <li>
         <div class="well">
           <h2><%= day.strftime("%A") %> <%= day.strftime("%e %B") %></h2>
-          <% ss.each do |s| %>
-            <ul>
-              <% if s.start_date.day == day.day %>
-                <li><%= s.start_date.getlocal.strftime("%H:%M") %>: <%= s.task_name %>, <%= s.duration %> timmar</li>
-              <% end %>
-            </ul>
+          <% if current_user.vacation_on(day) %>
+            <p>Semester idag!</p>
+          <% else %>
+            <% ss.each do |s| %>
+              <ul>
+                <% if s.start_date.day == day.day %>
+                  <li><%= s.start_date.getlocal.strftime("%H:%M") %>: <%= s.task_name %>, <%= s.duration %> timmar</li>
+                <% end %>
+              </ul>
+            <% end %>
           <% end %>
               <!-- <li>Inga inplanerade skift idag!</li> -->
         </div>

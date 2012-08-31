@@ -22,6 +22,20 @@
   </ul>
   <p>Totalt <%= u.daily_worktime %> timmar per dag</p>
 </div>
+
+<h2>Dina semesterdagar:</h2>
+<div class="well">
+  <ul>
+    <% u.vacations.each do |v| %>
+      <li><%= v.start_date.strftime("%e %B, %Y") %> till <%= v.end_date.strftime("%e %B, %Y") %>
+      </li>
+    <% end %>
+  </ul>
+  <% if u.vacations.size == 0 %>
+    <p>Du har inga inbokade semesterdagar!</p>
+  <% end %>
+</div>
+
 <h2>Minimumlängd på inplanerade arbetspass i planeringen</h2>
 <div class="well">
   <p>Planeringsfunktionen delar in uppdragen i arbetspass och portionerar ut över din planering. Det här är minimilängd för ett sådant arbetspass. </p>

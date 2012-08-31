@@ -30,3 +30,7 @@ end
 ScheduledShift.blueprint do
   # Attributes here
 end
+
+Vacation.blueprint do
+  # Attributes here
+end

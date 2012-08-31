@@ -2,15 +2,17 @@
 class User < ActiveRecord::Base
   Password = BCrypt::Password
 
-  attr_accessible :email, :password, :password_confirmation, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :min_scheduled_shift_length, :work_shifts_attributes
+  attr_accessible :email, :password, :password_confirmation, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday, :min_scheduled_shift_length, :work_shifts_attributes, :vacations_attributes
 
   has_many :tasks,       :dependent => :destroy
   has_many :clients
+  has_many :vacations
   has_many :work_shifts, :dependent => :destroy
   has_many :completed_shifts, :through => :tasks
   has_many :scheduled_shifts, :through => :tasks
 
   accepts_nested_attributes_for :work_shifts, :allow_destroy => true
+  accepts_nested_attributes_for :vacations, :allow_destroy => true
 
   validates_confirmation_of :password, :on => :create
   validates_presence_of     :password, :on => :create
@@ -92,8 +94,16 @@ class User < ActiveRecord::Base
     work_hours = work_days * daily_worktime
   end
 
+  def vacation_on(day)
+    vacation = false
+    self.vacations.each do |v| # Only fetch the vacations with end_date later than today?
+      vacation = true if (v.start_date.to_date..v.end_date.to_date).include?(day.to_date)
+    end
+    vacation
+  end
+
   def works_on(day)
-    send "#{day.strftime("%A").downcase}?"
+    send("#{day.strftime("%A").downcase}?") && !vacation_on(day)
   end
 
   def worked_hours_between(date1, date2)
