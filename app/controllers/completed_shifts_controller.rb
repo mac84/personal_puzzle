@@ -1,5 +1,10 @@
 class CompletedShiftsController < ApplicationController
 
+  def new
+    @task = current_user.tasks.where(:id => params[:t]).first
+    @completed_shift = @task.completed_shifts.new
+  end
+
   def create
     @completed_shift = CompletedShift.new(
       :task_id => params[:task_id],

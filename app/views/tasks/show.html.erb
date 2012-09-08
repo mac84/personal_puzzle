@@ -31,6 +31,8 @@
   <% if t.completed_shifts.size == 0 %>
     <p>Inga arbetade pass för "<%= t.name %>" ännu!</p>
   <% end %>
+  <%= link_to "Lägg till pass manuellt", new_completed_shift_path(:t => t) %>
+
 </div>
 
 <%= link_to "Redigera jobbet", edit_task_path(t) %>

@@ -1,0 +1,5 @@
+<%= simple_form_for cs do |f| %>
+  <p><%= f.date_select :start_date %> starttid</p><br />
+  <p><%= f.number_field :duration %> passets längd (i timmar)</p><br />
+  <%= f.submit 'Spara pass', :class => %w[btn btn-success] %>
+<% end %>
